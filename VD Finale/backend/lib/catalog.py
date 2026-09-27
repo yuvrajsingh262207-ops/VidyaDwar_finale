@@ -1,0 +1,128 @@
+"""Expandable, source-first scholarship catalog.
+
+Only scheme identity and URLs that can be tied to an official authority are marked
+Verified Official. Records without stored detailed guidelines intentionally return
+Review instead of guessing eligibility, deadlines, benefits, or documents.
+"""
+
+from typing import Any
+
+
+def _evidence(source: str, url: str, checked: str, status: str = "Needs Review", rule: str = "Eligibility details require official verification.", clause: str | None = None) -> dict[str, Any]:
+    return {"source_name": source, "source_url": url, "rule_text": rule, "clause": clause, "date_checked": checked, "verification_status": status}
+
+
+def _directory_record(
+    *,
+    id: str,
+    name: str,
+    provider: str,
+    category: str,
+    course: str,
+    education_level: str,
+    state: str,
+    source_type: str,
+    portal: str,
+    official_source_url: str,
+    official_url: str = "",
+    discovery_source: str | None = None,
+    keywords: list[str] | None = None,
+    data_status: str = "Verified Official",
+    description: str | None = None,
+    deadline: str = "Check official portal",
+    benefit: str = "Check official guidelines",
+    required_documents: list[str] | None = None,
+) -> dict[str, Any]:
+    summary = "Eligibility details require official verification."
+    return {
+        "id": id,
+        "name": name,
+        "short_description": description or f"Source-first directory record for {name}. Review current guidelines before applying.",
+        "provider": provider,
+        "category": category,
+        "course": course,
+        "education_level": education_level,
+        "state": state,
+        "eligibility_summary": summary,
+        "income_criteria": "Refer to current official guidelines",
+        "academic_criteria": "Refer to current official guidelines",
+        "benefit": benefit,
+        "portal": portal,
+        "source_type": source_type,
+        "official_source": provider,
+        "official_source_url": official_source_url,
+        "official_url": official_url,
+        "discovery_source": discovery_source,
+        "last_verified_date": "2026-09-21",
+        "data_status": data_status,
+        "keywords": list(dict.fromkeys((keywords or []) + [source_type, portal, provider, category, course, state])),
+        "rule": {"course": None, "minimum_marks": None, "income_limit": None, "state": None, "category": None, "important_condition": summary, "details_verified": False},
+        "required_documents": required_documents or [],
+        "deadline": deadline,
+        "restrictions": "No conflict restriction is asserted without a stored official rule. Manual verification is required.",
+        "evidence": _evidence(provider, official_source_url, "2026-09-21", "Needs Review", summary),
+        "conflict_rules": [],
+        "demo_record": False,
+    }
+
+
+def build_catalog(checked: str) -> list[dict[str, Any]]:
+    demo_evidence = lambda source, url, rule, clause: _evidence(source, url, checked, "Demo Rule", rule, clause)
+    prototype_records = [
+        {
+            "id": "national-stem", "name": "National STEM Advancement Scholarship", "short_description": "A prototype STEM support award for high-performing undergraduate learners.", "provider": "Ministry of Education • Prototype Dataset",
+            "category": "Merit", "course": "B.Tech / Engineering", "education_level": "Undergraduate", "state": "All India", "eligibility_summary": "Prototype criteria: B.Tech, minimum 75%, income up to ₹2.5 lakh.", "income_criteria": "Annual family income up to ₹2.5 lakh", "academic_criteria": "Minimum 75%", "benefit": "Prototype benefit — not an official amount", "portal": "National Scholarship Portal (reference)", "source_type": "Prototype", "official_source_url": "https://scholarships.gov.in/", "discovery_source": None, "last_verified_date": checked, "data_status": "Prototype", "keywords": ["engineering", "computer", "stem", "merit", "prototype"],
+            "rule": {"course": "B.Tech", "minimum_marks": 75, "income_limit": 250000, "state": None, "category": None, "important_condition": "Full-time undergraduate STEM study", "details_verified": True}, "required_documents": ["Marksheet", "Income Certificate", "Domicile Certificate", "Bank Details"], "deadline": "2026-04-30", "official_source": "Prototype record — verify on the official portal", "official_url": "https://scholarships.gov.in/", "restrictions": "Prototype conflict rule: simultaneous receipt with another maintenance benefit may require review at disbursement.", "evidence": demo_evidence("Prototype dataset • official portal link for verification", "https://scholarships.gov.in/", "Prototype rule: eligible applicants may apply and be selected, while concurrent maintenance benefits should be reviewed before receipt.", "Prototype Rule CR-01"), "conflict_rules": [{"with": "maharashtra-support", "stage": "disbursement", "status": "Conflict", "summary": "Possible overlap in maintenance support at receiving / disbursement.", "why": "Both records describe a maintenance benefit. The prototype rule permits review during application and selection, but flags simultaneous receipt for verification before funds are disbursed."}], "demo_record": True,
+        },
+        {
+            "id": "maharashtra-support", "name": "Maharashtra Higher Education Support Grant", "short_description": "A prototype state support grant for Maharashtra domiciled students.", "provider": "Government of Maharashtra • Prototype Dataset",
+            "category": "State support", "course": "Undergraduate", "education_level": "Undergraduate", "state": "Maharashtra", "eligibility_summary": "Prototype criteria: undergraduate, minimum 60%, Maharashtra, income up to ₹3 lakh.", "income_criteria": "Annual family income up to ₹3 lakh", "academic_criteria": "Minimum 60%", "benefit": "Prototype benefit — not an official amount", "portal": "MahaDBT (reference)", "source_type": "Prototype", "official_source_url": "https://mahadbt.maharashtra.gov.in/", "discovery_source": None, "last_verified_date": checked, "data_status": "Prototype", "keywords": ["mahadbt", "maharashtra", "engineering", "prototype"],
+            "rule": {"course": "Any undergraduate", "minimum_marks": 60, "income_limit": 300000, "state": "Maharashtra", "category": None, "important_condition": "Maharashtra domicile and active undergraduate enrolment", "details_verified": True}, "required_documents": ["Marksheet", "Income Certificate", "Domicile Certificate", "Bank Details"], "deadline": "2026-05-15", "official_source": "Prototype record — verify on the official portal", "official_url": "https://mahadbt.maharashtra.gov.in/", "restrictions": "Prototype conflict rule: disclose other maintenance support before acceptance and receipt.", "evidence": demo_evidence("Prototype dataset • official portal link for verification", "https://mahadbt.maharashtra.gov.in/", "Prototype rule: other maintenance awards should be disclosed; simultaneous receipt is a review point at disbursement.", "Prototype Rule CR-01"), "conflict_rules": [{"with": "national-stem", "stage": "disbursement", "status": "Conflict", "summary": "Possible overlap in maintenance support at receiving / disbursement.", "why": "Both records describe a maintenance benefit. The prototype rule permits review during application and selection, but flags simultaneous receipt for verification before funds are disbursed."}], "demo_record": True,
+        },
+        {
+            "id": "future-tech-merit", "name": "Future Tech Merit Fellowship", "short_description": "A prototype merit fellowship demonstrating an academic threshold.", "provider": "AlgoRush Knowledge Lab • Demo Record", "category": "Merit", "course": "B.Tech / Engineering", "education_level": "Undergraduate", "state": "All India", "eligibility_summary": "Prototype criteria: B.Tech and minimum 85%.", "income_criteria": "Annual family income up to ₹5 lakh", "academic_criteria": "Minimum 85%", "benefit": "Prototype benefit", "portal": "Prototype", "source_type": "Prototype", "official_source_url": "", "official_url": "", "discovery_source": None, "last_verified_date": checked, "data_status": "Prototype", "keywords": ["future", "tech", "engineering", "computer", "prototype"], "rule": {"course": "B.Tech", "minimum_marks": 85, "income_limit": 500000, "state": None, "category": None, "important_condition": "Minimum 85% academic performance", "details_verified": True}, "required_documents": ["Marksheet", "Bank Details"], "deadline": "2026-06-10", "official_source": "Prototype / Demo Rule", "restrictions": "Prototype record. Confirm current terms before acting.", "evidence": demo_evidence("Prototype / Demo Rule", "", "Prototype record used to demonstrate a deterministic academic threshold.", "Demo Rule FT-01"), "conflict_rules": [], "demo_record": True,
+        },
+        {
+            "id": "inclusive-campus", "name": "Inclusive Campus Access Award", "short_description": "A prototype access award demonstrating document-backed category review.", "provider": "Higher Education Access Network • Demo Record", "category": "Inclusion", "course": "Any undergraduate", "education_level": "Undergraduate", "state": "All India", "eligibility_summary": "Prototype category or disability condition requiring evidence.", "income_criteria": "Annual family income up to ₹4 lakh", "academic_criteria": "Minimum 55%", "benefit": "Prototype benefit", "portal": "Prototype", "source_type": "Prototype", "official_source_url": "", "official_url": "", "discovery_source": None, "last_verified_date": checked, "data_status": "Prototype", "keywords": ["SC", "ST", "reserved", "disability", "inclusive", "prototype"], "rule": {"course": "Any undergraduate", "minimum_marks": 55, "income_limit": 400000, "state": None, "category": "Reserved category or disability", "important_condition": "Reserved category or documented disability status", "details_verified": True}, "required_documents": ["Marksheet", "Income Certificate", "Category Certificate"], "deadline": "2026-07-01", "official_source": "Prototype / Demo Rule", "restrictions": "The category or disability condition needs document-backed review.", "evidence": demo_evidence("Prototype / Demo Rule", "", "Prototype record used to demonstrate a review-required category condition.", "Demo Rule IC-01"), "conflict_rules": [], "demo_record": True,
+        },
+        {
+            "id": "digital-learning", "name": "Digital Learning Access Grant", "short_description": "A prototype one-time equipment support record.", "provider": "Digital Education Mission • Demo Record", "category": "Equipment support", "course": "Any undergraduate", "education_level": "Undergraduate", "state": "All India", "eligibility_summary": "Prototype criteria for a one-time learning support benefit.", "income_criteria": "Annual family income up to ₹3.5 lakh", "academic_criteria": "Minimum 60%", "benefit": "Prototype equipment support", "portal": "Prototype", "source_type": "Prototype", "official_source_url": "", "official_url": "", "discovery_source": None, "last_verified_date": checked, "data_status": "Prototype", "keywords": ["digital", "computer", "equipment", "prototype"], "rule": {"course": "Any undergraduate", "minimum_marks": 60, "income_limit": 350000, "state": None, "category": None, "important_condition": "One-time learning support; check other equipment grants", "details_verified": True}, "required_documents": ["Marksheet", "Income Certificate", "Bank Details"], "deadline": "2026-08-20", "official_source": "Prototype / Demo Rule", "restrictions": "One-time support; check whether another equipment grant has already been received.", "evidence": demo_evidence("Prototype / Demo Rule", "", "Prototype record used to demonstrate a one-time benefit restriction.", "Demo Rule DL-01"), "conflict_rules": [], "demo_record": True,
+        },
+    ]
+
+    nsp = "https://scholarships.gov.in/"
+    aicte = "https://www.aicte.gov.in/schemes/students-development-schemes"
+    mahadbt = "https://mahadbt.maharashtra.gov.in/"
+    records = [
+        _directory_record(id="aicte-pragati", name="AICTE Pragati Scholarship Scheme for Girl Students", provider="All India Council for Technical Education (AICTE)", category="Women in technical education", course="Engineering / Technical degree or diploma", education_level="Undergraduate / Diploma", state="All India", source_type="AICTE", portal="National Scholarship Portal (NSP)", official_source_url=aicte, official_url=nsp, keywords=["pragati", "girl", "female", "engineering", "computer", "NSP"]),
+        _directory_record(id="aicte-saksham", name="AICTE Saksham Scholarship Scheme", provider="All India Council for Technical Education (AICTE)", category="Students with disabilities", course="Engineering / Technical degree or diploma", education_level="Undergraduate / Diploma", state="All India", source_type="AICTE", portal="National Scholarship Portal (NSP)", official_source_url=aicte, official_url=nsp, keywords=["saksham", "disability", "engineering", "NSP"]),
+        _directory_record(id="aicte-swanath", name="AICTE Swanath Scholarship Scheme", provider="All India Council for Technical Education (AICTE)", category="Technical education support", course="Engineering / Technical degree or diploma", education_level="Undergraduate / Diploma", state="All India", source_type="AICTE", portal="National Scholarship Portal (NSP)", official_source_url=aicte, official_url=nsp, keywords=["swanath", "engineering", "NSP"]),
+        _directory_record(id="pm-usp-csss", name="PM-USP Central Sector Scheme of Scholarship for College and University Students", provider="Department of Higher Education, Ministry of Education", category="Merit-cum-means", course="College and university courses", education_level="Undergraduate", state="All India", source_type="National Scholarship Portal", portal="National Scholarship Portal (NSP)", official_source_url=nsp, official_url=nsp, keywords=["PM USP", "CSSS", "NSP", "central sector"]),
+        _directory_record(id="pm-usp-jk", name="PM-USP Special Scholarship Scheme for Jammu, Kashmir and Ladakh", provider="Department of Higher Education, Ministry of Education", category="Regional support", course="College and professional courses", education_level="Undergraduate", state="Jammu and Kashmir / Ladakh", source_type="National Scholarship Portal", portal="National Scholarship Portal (NSP)", official_source_url=nsp, official_url=nsp, keywords=["PM USP", "JK", "Jammu", "Kashmir", "Ladakh", "NSP"]),
+        _directory_record(id="post-matric-disability", name="Post-Matric Scholarship for Students with Disabilities", provider="Department of Empowerment of Persons with Disabilities", category="Disability", course="Post-matric courses", education_level="Post-matric", state="All India", source_type="Government Ministry", portal="National Scholarship Portal (NSP)", official_source_url=nsp, official_url=nsp, keywords=["disability", "post matric", "NSP"]),
+        _directory_record(id="top-class-sc", name="Central Sector Scholarship of Top Class Education for SC Students", provider="Department of Social Justice and Empowerment", category="SC", course="Higher education", education_level="Undergraduate / Postgraduate", state="All India", source_type="Government Ministry", portal="National Scholarship Portal (NSP)", official_source_url=nsp, official_url=nsp, keywords=["SC", "scheduled caste", "top class", "NSP"]),
+        _directory_record(id="higher-education-st", name="National Fellowship and Scholarship for Higher Education of ST Students", provider="Ministry of Tribal Affairs", category="ST", course="Higher education", education_level="Undergraduate / Postgraduate", state="All India", source_type="Government Ministry", portal="National Scholarship Portal (NSP)", official_source_url=nsp, official_url=nsp, keywords=["ST", "scheduled tribe", "fellowship", "NSP"]),
+        _directory_record(id="ugc-pg-studies", name="National Scholarship for Post Graduate Studies", provider="University Grants Commission (UGC)", category="Postgraduate", course="Postgraduate courses", education_level="Postgraduate", state="All India", source_type="UGC", portal="National Scholarship Portal (NSP)", official_source_url="https://www.ugc.gov.in/", official_url=nsp, keywords=["UGC", "post graduate", "PG", "NSP"]),
+
+        _directory_record(id="mahadbt-goi-post-matric", name="Government of India Post-Matric Scholarship", provider="Social Justice and Special Assistance Department, Maharashtra", category="SC post-matric", course="Post-matric courses", education_level="Post-matric", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "SC", "scheduled caste", "post matric"]),
+        _directory_record(id="mahadbt-freeship", name="Post-Matric Tuition Fee and Examination Fee (Freeship)", provider="Social Justice and Special Assistance Department, Maharashtra", category="Fee reimbursement", course="Post-matric courses", education_level="Post-matric", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "freeship", "SC", "tuition fee"]),
+        _directory_record(id="mahadbt-maintenance-professional", name="Maintenance Allowance for Students Studying in Professional Courses", provider="Social Justice and Special Assistance Department, Maharashtra", category="Maintenance allowance", course="Professional courses / Engineering", education_level="Undergraduate / Postgraduate", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "maintenance", "professional", "engineering"]),
+        _directory_record(id="mahadbt-rajarshi-merit", name="Rajarshi Chhatrapati Shahu Maharaj Merit Scholarship", provider="VJNT, OBC and SBC Welfare Department, Maharashtra", category="Merit", course="Higher secondary", education_level="Class 11–12", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "Rajarshi", "VJNT", "OBC", "SBC"]),
+        _directory_record(id="mahadbt-ebc", name="Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Scheme", provider="Directorate of Technical Education, Maharashtra", category="EBC fee support", course="Professional and technical courses", education_level="Undergraduate / Postgraduate", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "EBC", "DTE", "engineering", "fee reimbursement"]),
+        _directory_record(id="mahadbt-disability", name="Post-Matric Scholarship for Persons with Disability", provider="Social Justice and Special Assistance Department, Maharashtra", category="Disability", course="Post-matric courses", education_level="Post-matric", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "disability", "post matric"]),
+        _directory_record(id="mahadbt-punjabrao", name="Dr. Punjabrao Deshmukh Vasatigruh Nirvah Bhatta Yojna", provider="Directorate of Technical Education, Maharashtra", category="Hostel / maintenance", course="Professional and technical courses", education_level="Undergraduate / Postgraduate", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "Punjabrao", "hostel", "DTE", "engineering"]),
+        _directory_record(id="mahadbt-minority", name="Scholarship for Students of Minority Communities Pursuing Higher and Professional Courses", provider="Minority Development Department, Maharashtra", category="Minority", course="Higher and professional courses", education_level="Undergraduate / Postgraduate", state="Maharashtra", source_type="MahaDBT", portal="MahaDBT", official_source_url=mahadbt, official_url=mahadbt, keywords=["MahaDBT", "minority", "professional", "engineering"]),
+
+        _directory_record(id="karnataka-ssp", name="Karnataka State Scholarship Portal Scheme Directory", provider="Government of Karnataka", category="State scholarship directory", course="Multiple courses", education_level="Multiple levels", state="Karnataka", source_type="State Government", portal="Karnataka SSP", official_source_url="https://ssp.karnataka.gov.in/", official_url="https://ssp.karnataka.gov.in/", keywords=["Karnataka", "SSP", "state scholarship"], data_status="Needs Review"),
+        _directory_record(id="uttar-pradesh-scholarship", name="Uttar Pradesh Scholarship and Fee Reimbursement Directory", provider="Government of Uttar Pradesh", category="State scholarship directory", course="Multiple courses", education_level="Multiple levels", state="Uttar Pradesh", source_type="State Government", portal="UP Scholarship", official_source_url="https://scholarship.up.gov.in/", official_url="https://scholarship.up.gov.in/", keywords=["UP", "Uttar Pradesh", "fee reimbursement"], data_status="Needs Review"),
+        _directory_record(id="madhya-pradesh-scholarship", name="Madhya Pradesh Higher Education Scholarship Directory", provider="Government of Madhya Pradesh", category="State scholarship directory", course="Higher education", education_level="Undergraduate / Postgraduate", state="Madhya Pradesh", source_type="State Government", portal="MP Scholarship Portal", official_source_url="https://hescholarship.mp.gov.in/", official_url="https://hescholarship.mp.gov.in/", keywords=["MP", "Madhya Pradesh", "state scholarship"], data_status="Needs Review"),
+        _directory_record(id="rajasthan-sje", name="Rajasthan Social Justice Scholarship Directory", provider="Social Justice and Empowerment Department, Rajasthan", category="State scholarship directory", course="Multiple courses", education_level="Multiple levels", state="Rajasthan", source_type="State Government", portal="Rajasthan SJE Scholarship", official_source_url="https://sjmsnew.rajasthan.gov.in/scholarship/", official_url="https://sjmsnew.rajasthan.gov.in/scholarship/", keywords=["Rajasthan", "SJE", "SC", "ST", "OBC"], data_status="Needs Review"),
+        _directory_record(id="west-bengal-oasis", name="West Bengal OASIS Scholarship Directory", provider="Backward Classes Welfare Department, West Bengal", category="SC / ST / OBC", course="Post-matric courses", education_level="Post-matric", state="West Bengal", source_type="State Government", portal="OASIS", official_source_url="https://oasis.wb.gov.in/", official_url="https://oasis.wb.gov.in/", keywords=["West Bengal", "OASIS", "SC", "ST", "OBC"], data_status="Needs Review"),
+        _directory_record(id="odisha-state-scholarship", name="Odisha State Scholarship Portal Scheme Directory", provider="Government of Odisha", category="State scholarship directory", course="Multiple courses", education_level="Multiple levels", state="Odisha", source_type="State Government", portal="Odisha State Scholarship Portal", official_source_url="https://scholarship.odisha.gov.in/website/home", official_url="https://scholarship.odisha.gov.in/website/home", keywords=["Odisha", "OSSP", "state scholarship"], data_status="Needs Review"),
+
+        _directory_record(id="reliance-foundation-ug", name="Reliance Foundation Undergraduate Scholarships", provider="Reliance Foundation", category="Merit-cum-means", course="Any undergraduate degree", education_level="Undergraduate", state="All India", source_type="Corporate / Private", portal="Reliance Foundation Scholarships", official_source_url="https://www.scholarships.reliancefoundation.org/UG_Scholarship", official_url="https://www.scholarships.reliancefoundation.org/", keywords=["Reliance", "private", "corporate", "undergraduate"]),
+        _directory_record(id="hdfc-parivartan", name="HDFC Bank Parivartan ECSS Programme", provider="HDFC Bank", category="Merit-cum-need", course="School to postgraduate courses", education_level="Multiple levels", state="All India", source_type="Corporate / Private", portal="Parivartan ECSS", official_source_url="https://www.parivartanecss.com/", official_url="https://www.parivartanecss.com/", discovery_source="Buddy4Study", keywords=["HDFC", "Parivartan", "private", "corporate", "Buddy4Study", "discovery platform"]),
+        _directory_record(id="tata-capital-pankh", name="Tata Capital Pankh Scholarship Programme", provider="Tata Capital", category="Education support", course="School, diploma and degree courses", education_level="Multiple levels", state="All India", source_type="Corporate / Private", portal="Provider information page", official_source_url="https://www.tata.com/newsroom/community/tata-capital-pankh-scholarship", official_url="", discovery_source="Buddy4Study", keywords=["Tata Capital", "Pankh", "private", "corporate", "Buddy4Study", "discovery platform"]),
+        _directory_record(id="iit-bombay-aid", name="IIT Bombay Student Scholarships and Financial Aid Directory", provider="Indian Institute of Technology Bombay", category="Institutional aid", course="IIT Bombay programmes", education_level="Undergraduate / Postgraduate", state="Maharashtra", source_type="University", portal="IIT Bombay", official_source_url="https://www.iitb.ac.in/", official_url="", keywords=["IIT Bombay", "university", "institution", "engineering", "computer"], data_status="Needs Review"),
+    ]
+    return prototype_records + records
