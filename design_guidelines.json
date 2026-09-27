@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "name": "VIDYADWAR — AI-Powered Scholarship Decision Navigator",
+    "tagline": "OPENING PATHS. BRIGHTER FUTURES.",
+    "hackathon": "CODEX 2026",
+    "domain": "Smart Education / EdTech",
+    "team": "AlgoRush",
+    "app_type": "hybrid_fullstack"
+  },
+  "theme_and_archetype": {
+    "theme": "light_and_dark_supported_default_slate_navy",
+    "archetype": "ARCHETYPE 4: SWISS & HIGH-CONTRAST + PERFORMANCE EDTECH",
+    "visual_vibe": "Command-center accuracy for student scholarships, zero fluff, high signal-to-noise ratio, evidence-locked credibility, tactical glassmorphism and cardless grid structure."
+  },
+  "color_palette": {
+    "primary_navy": {
+      "deep": "#0F172A",
+      "main": "#1E293B",
+      "light": "#334155",
+      "subtle": "#F8FAFC"
+    },
+    "accent_teal": {
+      "emerald_teal": "#0D9488",
+      "bright_teal": "#14B8A6",
+      "light_glow": "#CCFBF1",
+      "dark_teal": "#115E59"
+    },
+    "gold_accent": {
+      "warm_gold": "#D97706",
+      "amber_glow": "#F59E0B",
+      "gold_subtle": "#FEF3C7"
+    },
+    "status_colors": {
+      "compatible_green": "#16A34A",
+      "compatible_bg": "#DCFCE7",
+      "review_yellow": "#CA8A04",
+      "review_bg": "#FEF9C3",
+      "conflict_red": "#DC2626",
+      "conflict_bg": "#FEE2E2"
+    },
+    "neutrals": {
+      "canvas_light": "#FAFAFC",
+      "surface_card": "#FFFFFF",
+      "border_stroke": "#E2E8F0",
+      "text_dark": "#0F172A",
+      "text_muted": "#64748B"
+    }
+  },
+  "typography": {
+    "headline_font": "Outfit, sans-serif",
+    "body_font": "Plus Jakarta Sans, sans-serif",
+    "mono_font": "JetBrains Mono, monospace",
+    "scale": {
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 dark:text-white",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white",
+      "h3_card": "text-xl sm:text-2xl font-semibold text-slate-800 dark:text-slate-100",
+      "h4_sub": "text-lg font-medium text-slate-800 dark:text-slate-200",
+      "body_main": "text-base leading-relaxed text-slate-600 dark:text-slate-300",
+      "body_small": "text-sm text-slate-500 dark:text-slate-400",
+      "mono_clause": "font-mono text-xs uppercase tracking-wider text-teal-700 dark:text-teal-300"
+    }
+  },
+  "layout_and_spacing": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "grid_bento": "grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-6 lg:gap-8",
+    "spacing_scale": "Generous spacing philosophy: section padding py-16 lg:py-24, component gap-6 or gap-8, text-box p-6 sm:p-8",
+    "card_style": "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-6"
+  },
+  "stage_aware_conflict_graph_design": {
+    "stages": [
+      {"id": "application", "label": "Stage 1: Application Submission"},
+      {"id": "selection", "label": "Stage 2: Shortlisting & Selection"},
+      {"id": "acceptance", "label": "Stage 3: Award Acceptance & Undertaking"},
+      {"id": "disbursement", "label": "Stage 4: Bank Disbursement"},
+      {"id": "recheck", "label": "Stage 5: Subsequent Academic Year Re-check"}
+    ],
+    "node_styles": {
+      "active_scholarship": "bg-slate-900 text-white dark:bg-slate-800 border-2 border-teal-500 rounded-lg p-4 shadow-md",
+      "compatible_state": "bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-md p-3",
+      "review_state": "bg-amber-50 border border-amber-300 text-amber-900 rounded-md p-3",
+      "conflict_state": "bg-rose-50 border border-rose-300 text-rose-900 rounded-md p-3"
+    },
+    "evidence_locked_modal": "Fixed overlay with glassmorphism backdrop-blur-md bg-slate-900/60, crisp white modal card with official rule clause box, citation tag, exact gazette date, and direct official portal button."
+  },
+  "image_urls": {
+    "hero_student_1": "https://images.unsplash.com/photo-1667655861998-46fe4c29a4cf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBzdHVkZW50JTIwY29sbGVnZSUyMHN0dWR5JTIwc2Nob2xhcnNoaXB8ZW58MHx8fHwxNzg5OTA3NDIwfDA&ixlib=rb-4.1.0&q=85",
+    "hero_student_group": "https://images.unsplash.com/photo-1637589316488-6d4c41b335cd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBzdHVkZW50JTIwY29sbGVnZSUyMHN0dWR5JTIwc2Nob2xhcnNoaXB8ZW58MHx8fHwxNzg5OTA3NDIwfDA&ixlib=rb-4.1.0&q=85",
+    "aarav_avatar_study": "https://images.unsplash.com/photo-1604177091072-b7b677a077f6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBzdHVkZW50JTIwY29sbGVnZSUyMHN0dWR5JTIwc2Nob2xhcnNoaXB8ZW58MHx8fHwxNzg5OTA3NDIwfDA&ixlib=rb-4.1.0&q=85",
+    "library_research": "https://images.unsplash.com/photo-1567168544813-cc03465b4fa8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBzdHVkZW50JTIwY29sbGVnZSUyMHN0dWR5JTIwc2Nob2xhcnNoaXB8ZW58MHx8fHwxNzg5OTA3NDIwfDA&ixlib=rb-4.1.0&q=85",
+    "campus_life": "https://images.pexels.com/photos/8199557/pexels-photo-8199557.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  "brand_identity": {
+    "logo_text": "VIDYADWAR",
+    "logo_badge": "CODEX 2026 | Team AlgoRush",
+    "tagline": "OPENING PATHS. BRIGHTER FUTURES.",
+    "svg_logo_component": "Cap & Keyhole Hybrid SVG Icon with Teal and Navy gradients"
+  },
+  "key_user_journey_nodes": [
+    "Landing Page with Vidyadwar Brand Identity",
+    "Get Started / Demo Mode Choice",
+    "Aarav Sharma Pre-Loaded Demo Profile (CS Undergrad, Income < ₹2.5L)",
+    "Scholarship Search & Deterministic Match Engine",
+    "Document Readiness Assessment (Aadhaar, Income, Marksheet, Caste)",
+    "Select Any 2 Scholarships for Side-by-Side Lifecycle Comparison",
+    "Stage-Aware Conflict Engine & Interactive Graph",
+    "Evidence-Locked Explanation Drawer (Official Rule / Clause / Date)",
+    "Student Decision Outcome (Proceed, Switch, or Alternative Strategy)",
+    "Application Readiness & Action Plan Checklist",
+    "Official Portal Redirection with Authority Disclaimer"
+  ],
+  "testing_requirements": {
+    "data_testid_policy": "All interactive elements (buttons, inputs, select options, tabs, modal triggers, links) MUST contain role-based data-testid attributes (e.g. data-testid='aarav-demo-button', data-testid='compare-scholarships-button', data-testid='evidence-explanation-modal')."
+  }
+}
